@@ -30,12 +30,12 @@ const features = [
 const Features = () => {
   return (
     <section className="bg-white dark:bg-gray-900 py-16 px-4">
-         <h2 className="text-4xl font-extrabold text-green-600 text-center mb-12">Why You Choose</h2>
+         <h2 className="text-4xl font-extrabold text-primary text-center mb-12">Why You Choose</h2>
       <div className="max-w-6xl mx-auto grid gap-8">
         {features.map((feature) => (
           <div
             key={feature.id}
-            className="flex items-center bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-xl transition duration-300"
+            className="flex items-center bg-gray-50 dark:bg-gray-800 rounded-2xl p-10 shadow-md hover:shadow-xl transition duration-300"
           >
             {/* Left Side Image */}
             <div className="flex-shrink-0">

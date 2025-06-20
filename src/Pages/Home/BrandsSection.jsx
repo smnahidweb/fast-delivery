@@ -25,8 +25,8 @@ const BrandSection = () => {
   return (
     <section className="bg-white dark:bg-gray-900 py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
-          Trusted by 7+ Top Brands
+        <h2 className="text-4xl font-extrabold text-center text-primary mb-20">
+          Trusted By 7+ Top Brands
         </h2>
 
         <Marquee speed={60} pauseOnHover={true} direction="right" gradient={false}>
