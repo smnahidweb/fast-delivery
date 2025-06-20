@@ -6,6 +6,8 @@ import Features from '../Features/Features';
 import MerchentBanner from '../MerchentBanner/MerchentBanner';
 import HowItWorks from '../HowItWorks/HowItWorks';
 import ReviewSection from '../ReviewSection/ReviewSection';
+import { FaQ } from 'react-icons/fa6';
+import FAQ from '../FAQ/FAQ';
 
 const Home = () => {
     return (
@@ -17,6 +19,7 @@ const Home = () => {
           <Features></Features>
           <MerchentBanner></MerchentBanner>
           <ReviewSection></ReviewSection>
+          <FAQ></FAQ>
         </div>
     );
 };
