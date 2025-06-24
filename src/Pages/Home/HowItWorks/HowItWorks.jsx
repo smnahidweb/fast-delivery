@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PackageSearch, Wallet, MapPin, Building2 } from 'lucide-react'; // Lucide icons
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 
 const steps = [
   {
@@ -29,8 +32,14 @@ const steps = [
 ];
 
 const HowItWorks = () => {
+  useEffect(() => {
+   AOS.init({
+      duration: 1000, // Animation duration
+      once: true,     // Whether animation should happen only once
+    });
+  }, []);
   return (
-    <section className="bg-white dark:bg-gray-900 py-16 px-4">
+    <section className="bg-white dark:bg-gray-900 py-16 px-4" data-aos="zoom-in-up">
       <div className="max-w-7xl mx-auto text-center mb-12">
         <h2 className="text-4xl font-bold text-primary mb-4">
           How It Works
@@ -44,7 +53,7 @@ const HowItWorks = () => {
         {steps.map((step) => (
           <div
             key={step.id}
-            className="bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl shadow-md text-center hover:shadow-xl transition duration-300 hover:bg-[#CAEB66]"
+            className="bg-gray-50 dark:bg-gray-800 p-6 rounded-2xl shadow-md text-center hover:shadow-xl transition duration-300 hover:bg-secondary"
           >
             <div className="flex justify-center mb-4">
               {step.icon}

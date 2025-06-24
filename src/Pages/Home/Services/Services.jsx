@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import {
   FaShippingFast,
   FaMapMarkedAlt,
@@ -49,8 +51,14 @@ const services = [
 ];
 
 const Services = () => {
+  useEffect(() => {
+     AOS.init({
+        duration: 2000, // Animation duration
+        once: true,     // Whether animation should happen only once
+      });
+    }, []);
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16  rounded-2xl mt-12" >
+    <section className="max-w-7xl mx-auto px-4 py-16  rounded-2xl mt-12" data-aos="fade-right" >
       <div className="text-center mb-12">
         <h2 className="text-4xl font-extrabold text-primary">Our Services</h2>
         <p className="text-gray-600 max-w-2xl mx-auto mt-4">
