@@ -5,6 +5,7 @@ import { AuthContext } from '../../../Context/AuthProvider';
 import Swal from 'sweetalert2';
 
 const Navbar = () => {
+  const {user,LogOut} = useContext(AuthContext)
     const links = <>
     
     <li> <NavLink to={'/'}>Home</NavLink> </li>
@@ -12,9 +13,19 @@ const Navbar = () => {
       <li> <NavLink to={'/login'}>Login</NavLink> </li>
      <li> <NavLink to={'/coverage'}>Coverage</NavLink> </li>
       <li> <NavLink to={'/sendParcel'}>Send a Parcel</NavLink> </li>
+       {
+      user && <>
+      
+       <li> <NavLink to={'/dashboard'}>Dashboard</NavLink> </li>
+      
+      </>
+    }
     </>
+
+ 
+   
     
-    const {user,LogOut} = useContext(AuthContext)
+    
     const handleLogout = ()=>{
 
       LogOut()

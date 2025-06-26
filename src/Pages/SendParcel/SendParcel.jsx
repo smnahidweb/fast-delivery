@@ -1,83 +1,117 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
+import { AuthContext } from '../../Context/AuthProvider';
+import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
 
 const SendParcel = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch } = useForm();
+  const { user } = useContext(AuthContext);
+  const axiosSecure = UseAxiosSecure();
   const serviceData = useLoaderData();
 
   const senderRegion = watch("senderRegion");
   const receiverRegion = watch("receiverRegion");
   const parcelType = watch("type");
 
-const onSubmit = (data) => {
-  const isSameDistrict = data.senderServiceCenter === data.receiverServiceCenter;
-  const weight = parseFloat(data.weight) || 0;
-  let baseCost = 0;
-  let extraWeightCost = 0;
-  let outsideFee = 0;
-
-  // Calculate base cost
-  if (data.type === "document") {
-    baseCost = isSameDistrict ? 60 : 80;
-  } else {
-    if (weight <= 3) {
-      baseCost = isSameDistrict ? 110 : 150;
-    } else {
-      const extraKg = weight - 3;
-      extraWeightCost = extraKg * 40;
-      baseCost = isSameDistrict ? 110 : 150;
-      if (!isSameDistrict) {
-        outsideFee = 40; // only add if outside and overweight
-      }
-    }
-  }
-
-  const totalCost = baseCost + extraWeightCost + outsideFee;
-
-  const saveData = {
-    ...data,
-    cost: totalCost,
-    creation_date: new Date().toISOString()
+  const generateTrackingId = () => {
+    const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `TRK-${date}-${randomPart}`;
   };
 
-  Swal.fire({
-    icon: 'question',
-    title: 'Confirm Parcel?',
-    html: `
-      <div style="text-align: left">
-        <p><strong>Parcel Type:</strong> ${data.type}</p>
-        <p><strong>Weight:</strong> ${weight} kg</p>
-        <p><strong>Base Cost:</strong> ৳${baseCost}</p>
-        <p><strong>Extra Weight Cost:</strong> ৳${extraWeightCost}</p>
-        ${outsideFee > 0 ? `<p><strong>Outside District Fee:</strong> ৳${outsideFee}</p>` : ""}
-        <hr />
-        <p><strong>Total Cost:</strong> <span style="color:green;font-size:18px;">৳${totalCost}</span></p>
-      </div>
-    `,
-    showCancelButton: true,
-    showConfirmButton: true,
-    confirmButtonText: '💳 Continue with Payment',
-    cancelButtonText: '✏️ Edit Parcel Info',
-    confirmButtonColor: '#16a34a',
-    cancelButtonColor: '#d97706',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      console.log("✅ Final Parcel Data to Proceed with Payment:", saveData);
-    } else {
-      console.log("📝 User chose to edit parcel info.");
-    }
-  });
-};
+  const onSubmit = (data) => {
+    const isSameDistrict = data.senderServiceCenter === data.receiverServiceCenter;
+    const weight = parseFloat(data.weight) || 0;
 
+    let baseCost = 0;
+    let extraWeightCost = 0;
+    let outsideFee = 0;
+
+    if (data.type === "document") {
+      baseCost = isSameDistrict ? 60 : 80;
+    } else {
+      if (weight <= 3) {
+        baseCost = isSameDistrict ? 110 : 150;
+      } else {
+        const extraKg = weight - 3;
+        extraWeightCost = extraKg * 40;
+        baseCost = isSameDistrict ? 110 : 150;
+        if (!isSameDistrict) outsideFee = 40;
+      }
+    }
+
+    const totalCost = baseCost + extraWeightCost + outsideFee;
+    const trackingId = generateTrackingId();
+
+    const saveData = {
+      ...data,
+      cost: totalCost,
+      trackingId,
+      creation_date: new Date().toISOString(),
+      created_by: user?.email,
+      payment: 'not-paid',
+      delivery_status: 'not-collected',
+    };
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Confirm Parcel?',
+      html: `
+        <div style="text-align: left">
+          <p><strong>Parcel Type:</strong> ${data.type}</p>
+          <p><strong>Weight:</strong> ${weight} kg</p>
+          <p><strong>Base Cost:</strong> ৳${baseCost}</p>
+          <p><strong>Extra Weight Cost:</strong> ৳${extraWeightCost}</p>
+          ${outsideFee > 0 ? `<p><strong>Outside District Fee:</strong> ৳${outsideFee}</p>` : ''}
+          <hr />
+          <p><strong>Total Cost:</strong> <span style="color:green;font-size:18px;">৳${totalCost}</span></p>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: '💳 Continue with Payment',
+      cancelButtonText: '✏️ Edit Parcel Info',
+      confirmButtonColor: '#16a34a',
+      cancelButtonColor: '#d97706',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.post('/parcels', saveData)
+          .then(res => {
+            if (res.data.insertedId) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Parcel Saved Successfully!',
+                html: `
+                  <p><strong>Tracking ID:</strong> ${trackingId}</p>
+                  <p><strong>Total Cost:</strong> ৳${totalCost}</p>
+                `,
+                showCancelButton: true,
+                confirmButtonText: '💳 Proceed to Payment',
+                cancelButtonText: 'Close',
+                confirmButtonColor: '#16a34a',
+                cancelButtonColor: '#d33',
+              }).then(result => {
+                if (result.isConfirmed) {
+                  console.log("➡️ Redirect to payment... (to be implemented)");
+                }
+              });
+            }
+          })
+          .catch(error => {
+            console.error("❌ Parcel Save Failed:", error);
+            Swal.fire('Error', 'Something went wrong while saving the parcel.', 'error');
+          });
+      } else {
+        console.log("📝 User chose to edit parcel info.");
+      }
+    });
+  };
 
   const regions = [...new Set(serviceData.map(item => item.region))];
 
   const getServiceCenters = (region) => {
-    return serviceData
-      .filter(item => item.region === region)
-      .map(item => item.district);
+    return serviceData.filter(item => item.region === region).map(item => item.district);
   };
 
   return (
@@ -95,11 +129,7 @@ const onSubmit = (data) => {
             <option value="non-document">Non-document</option>
           </select>
 
-          <input
-            {...register("product", { required: true })}
-            placeholder="Parcel Product"
-            className="input input-bordered w-full mb-2"
-          />
+          <input {...register("product", { required: true })} placeholder="Parcel Product" className="input input-bordered w-full mb-2" />
 
           {parcelType === "non-document" && (
             <input

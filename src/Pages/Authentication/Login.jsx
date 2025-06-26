@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
@@ -8,7 +8,9 @@ import Swal from "sweetalert2";
 const Login = () => {
     const {register,handleSubmit, formState: { errors },} = useForm()
     const {SignIn, GoogleSignIn} = useContext(AuthContext)
-  
+    const location = useLocation()
+    const navigate = useNavigate()
+    
     const onSubmit = data =>{
         console.log('submitted Data',data)
         const {email,password} = data
@@ -21,6 +23,7 @@ const Login = () => {
              icon: "success",
              draggable: true
            });
+           navigate(`${location.state?location.state:'/' }`)
            
            console.log(user)
          
@@ -40,6 +43,7 @@ const Login = () => {
              icon: "success",
              draggable: true
            });
+           navigate(`${location.state?location.state:"/"}`)
 
       })
       .catch((error)=>{
