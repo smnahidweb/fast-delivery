@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router';
 import { FaBars } from 'react-icons/fa';
+import { FaHome, FaBox, FaMoneyCheckAlt, FaPaperPlane, FaUser } from 'react-icons/fa';
 import Logo from '../Pages/Shared/Logo/Logo';
 const Dashboard = () => {
     return (
@@ -28,13 +29,47 @@ const Dashboard = () => {
         <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
         <ul className="menu p-4 w-72 min-h-full bg-base-200 text-base-content">
           <Logo></Logo>
-          <li><a>Dashboard Home</a></li>
-         <Link to={'/dashboard/myParcels'}> 
-         <li><a>My Parcels</a></li>
-          </Link>
-          <li><a>Send Parcel</a></li>
-          <li><a>Profile</a></li>
-         
+          <li>
+    <Link to="/dashboard">
+      <FaHome className="mr-2" /> Dashboard Home
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/dashboard/myParcels">
+      <FaBox className="mr-2" /> My Parcels
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/dashboard/paymentHistory">
+      <FaMoneyCheckAlt className="mr-2" /> Payment History
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/dashboard/sendParcel">
+      <FaPaperPlane className="mr-2" /> Send Parcel
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/dashboard/pendingRiders">
+      <FaPaperPlane className="mr-2" /> Pending Riders
+    </Link>
+  </li>
+ 
+  <li>
+    <Link to="/dashboard/activeRiders">
+      <FaPaperPlane className="mr-2" /> Active Riders
+    </Link>
+  </li>
+
+  <li>
+    <Link to="/dashboard/profile">
+      <FaUser className="mr-2" /> Profile
+    </Link>
+  </li>
         </ul>
       </div>
     </div>

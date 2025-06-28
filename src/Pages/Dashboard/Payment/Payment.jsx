@@ -5,7 +5,7 @@ import PaymentForm from './PaymentForm';
 import { useParams } from 'react-router';
 
 
-const stripesPromise = loadStripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh')
+const stripesPromise = loadStripe(import.meta.env.VITE_Payment_key)
 
 const Payment = () => {
     const {parcelId} = useParams()

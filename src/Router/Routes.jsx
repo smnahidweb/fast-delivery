@@ -10,6 +10,10 @@ import SendParcel from "../Pages/SendParcel/SendParcel";
 import Dashboard from "../Layout/Dashboard";
 import MyParcel from "../Pages/Dashboard/MyParcel";
 import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentHistory from "../Pages/Dashboard/PaymentHistory/PaymentHistory";
+import BeRider from "../Pages/BeRider/BeRider";
+import PendingRiders from "../Pages/Dashboard/PendingRider/PendingRiders";
+import ActiveRiders from "../Pages/Dashboard/ActiveRiders/ActiveRiders";
  export const router = createBrowserRouter([
   {
   path: "/",
@@ -23,6 +27,12 @@ import Payment from "../Pages/Dashboard/Payment/Payment";
        path:'/coverage',
        Component:Coverage,
        loader: ()=> fetch('/Districs.json')
+    },
+    {
+      path:'/beRider',
+     element:<PrivateRoute>
+      <BeRider></BeRider>
+     </PrivateRoute>
     },
     {
       path:'/sendParcel',
@@ -59,7 +69,21 @@ import Payment from "../Pages/Dashboard/Payment/Payment";
       {
         path:'payment/:parcelId',
         Component:Payment
+      },
+      {
+        path:'paymentHistory',
+        Component:PaymentHistory
+      },
+      {
+        path:'pendingRiders',
+        Component:PendingRiders
+
       }
+      ,{
+        path:'activeRiders',
+        Component:ActiveRiders
+      }
+
     ]
   }
 ])

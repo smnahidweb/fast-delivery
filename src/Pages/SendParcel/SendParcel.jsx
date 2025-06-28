@@ -51,7 +51,7 @@ const SendParcel = () => {
       trackingId,
       creation_date: new Date().toISOString(),
       created_by: user?.email,
-      payment: 'not-paid',
+      payment_status: 'not-paid',
       delivery_status: 'not-collected',
     };
 

@@ -83,10 +83,10 @@ navigate(`/dashboard/payment/${id}`)
                 <td>
                   <div
                     className={`badge badge-md px-4 py-2 text-white text-center ${
-                      parcel.payment === 'paid' ? 'bg-green-500' : 'bg-yellow-500'
+                      parcel.payment_status === 'paid' ? 'bg-green-500' : 'bg-yellow-500'
                     }`}
                   >
-                    {parcel.payment === 'paid' ? 'Paid' : 'Not Paid'}
+                    {parcel.payment_status === 'paid' ? 'Paid' : 'Not Paid'}
                   </div>
                 </td>
                 <td>
@@ -111,7 +111,8 @@ navigate(`/dashboard/payment/${id}`)
                     >
                       Delete
                     </button>
-                    {parcel.payment === 'not-paid' && (
+                    {parcel.payment_status === 'not-paid' && 
+                    (
                       <button onClick={()=> handlePayment(parcel._id)} className="btn btn-xs btn-success">Pay</button>
                     )}
                   </div>
