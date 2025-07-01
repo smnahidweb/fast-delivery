@@ -3,7 +3,10 @@ import { Link, Outlet } from 'react-router';
 import { FaBars } from 'react-icons/fa';
 import { FaHome, FaBox, FaMoneyCheckAlt, FaPaperPlane, FaUser } from 'react-icons/fa';
 import Logo from '../Pages/Shared/Logo/Logo';
+import UseUserRole from '../Hooks/UseUserRole';
 const Dashboard = () => {
+  const {role,isRoleLoading} = UseUserRole();
+  console.log(role)
     return (
         <div className="drawer lg:drawer-open">
       {/* Toggle for small devices */}
@@ -35,6 +38,40 @@ const Dashboard = () => {
     </Link>
   </li>
 
+
+{/* admin routes with conditionally */}
+
+
+{ role ==="Admin" && !isRoleLoading &&
+
+<>
+
+<li>
+
+    <Link to="/dashboard/makeAdmin">
+      <FaUser className="mr-2" /> Make Admin
+    </Link>
+  </li>
+  
+  <li>
+    <Link to="/dashboard/pendingRiders">
+      <FaPaperPlane className="mr-2" /> Pending Riders
+    </Link>
+  </li>
+ 
+  <li>
+    <Link to="/dashboard/activeRiders">
+      <FaPaperPlane className="mr-2" /> Active Riders
+    </Link>
+  </li>
+
+
+</>
+
+
+}
+
+
   <li>
     <Link to="/dashboard/myParcels">
       <FaBox className="mr-2" /> My Parcels
@@ -53,23 +90,15 @@ const Dashboard = () => {
     </Link>
   </li>
 
-  <li>
-    <Link to="/dashboard/pendingRiders">
-      <FaPaperPlane className="mr-2" /> Pending Riders
-    </Link>
-  </li>
- 
-  <li>
-    <Link to="/dashboard/activeRiders">
-      <FaPaperPlane className="mr-2" /> Active Riders
-    </Link>
-  </li>
 
   <li>
     <Link to="/dashboard/profile">
       <FaUser className="mr-2" /> Profile
     </Link>
   </li>
+
+
+
         </ul>
       </div>
     </div>

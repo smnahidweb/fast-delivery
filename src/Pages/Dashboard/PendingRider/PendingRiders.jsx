@@ -30,12 +30,18 @@ const PendingRiders = () => {
     setSelectedRider(rider);
     setActionType(type);
     document.getElementById("action_modal").showModal();
+    // confirmAction(email)
+
   };
 
   const confirmAction = async () => {
     try {
       const updatedStatus = actionType === "approve" ? "active" : "cancelled";
-      await axiosSecure.put(`/riders/${selectedRider._id}`, { status: updatedStatus });
+    await axiosSecure.put(`/riders/${selectedRider._id}`, {
+  status: updatedStatus,
+  email: selectedRider.email
+});
+
       refetch()
     //  riders((prev) => prev.filter((r) => r._id !== selectedRider._id));
     //   document.getElementById("action_modal").close();
@@ -89,14 +95,14 @@ const PendingRiders = () => {
                     <FaEye />
                   </button>
                   <button
-                    onClick={() => handleAction(rider, "approve")}
+                    onClick={() => handleAction(rider, "approve",rider?.email)}
                     className="btn btn-sm bg-green-500 text-white hover:bg-green-600"
                     title="Approve"
                   >
                     <FaCheck />
                   </button>
                   <button
-                    onClick={() => handleAction(rider, "cancel")}
+                    onClick={() => handleAction(rider, "cancel",rider?.email)}
                     className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
                     title="Cancel"
                   >
